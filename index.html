@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- <select id="region-select">
+        <option value="华东">华东</option>
+        <option value="华北">华北</option>
+        <option value="华南">华南</option>
+    </select>
+
+    <select id="product-select">
+        <option value="手机">手机</option>
+        <option value="笔记本">笔记本</option>
+        <option value="智能音箱">智能音箱</option>
+    </select> -->
+    <div class="region-select center">
+        <p>地区：</p>
+        <div id="region-radio-wrapper" data-group="region"></div>
+    </div>
+
+    <div class="product-select center" >
+        <p>商品：</p>
+        <div id="product-radio-wrapper" data-group="product"></div>
+    
+    </div>
+   
+    <div id="table-wrapper">
+        <table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-0lax" id="th-1">商品</th>
+                <th class="tg-0lax" id="th-2">地区</th>
+                <th class="tg-0lax">一月</th>
+                <th class="tg-0lax">二月</th>
+                <th class="tg-0lax">三月</th>
+                <th class="tg-0lax">四月</th>
+                <th class="tg-0lax">五月</th>
+                <th class="tg-0lax">六月</th>
+                <th class="tg-0lax">七月</th>
+                <th class="tg-0lax">八月</th>
+                <th class="tg-0lax">九月</th>
+                <th class="tg-0lax">十月</th>
+                <th class="tg-0lax">十一月</th>
+                <th class="tg-0lax">十二月</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+            </table>
+    </div>
+ 
+    <script type="module" src="main.js"></script>
+</body>
+</html>
