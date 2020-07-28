@@ -35,3 +35,21 @@ export const sourceData = [{
     region: "华南",
     sale: [10, 40, 10, 6, 5, 6, 8, 6, 6, 6, 7, 26]
 }]
+
+
+export const productList = ['手机', '笔记本', '智能音箱'];
+export const regionList = ['华东', '华南', '华北'];
+export const optionList = {product: {'手机': true, '笔记本': false, '智能音箱': false, length: 3}, 
+region: {'华东': true, '华南': false, '华北': false, length: 3}};
+
+
+export function updateOptionList(checkBoxes, optionList, group){
+    checkBoxes.forEach(el => {
+        if (el.checked){
+            optionList[group][el.value] = true;
+            
+        } else {
+            optionList[group][el.value] = false;
+        }
+     })
+}

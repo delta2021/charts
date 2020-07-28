@@ -1,114 +1,134 @@
-import {sourceData} from './modules/ife31data.js';
+import {sourceData, productList, regionList, optionList, updateOptionList} from './modules/data.js';
 import {showTable} from './modules/table.js';
+import {generateCheckBox, checkedCounter} from './modules/checkBox.js';
+import {drawBar} from './modules/bar.js';
 
-
-const productList = ['手机', '笔记本', '智能音箱'];
-const regionList = ['华东', '华南', '华北'];
-const optionList = {product: {'手机': true, '笔记本': false, '智能音箱': false, length: 3}, 
-region: {'华东': true, '华南': false, '华北': false, length: 3}};
-const thOrder = {'0': 'product', '1': 'region', '2': 'sale'};
 
 //生成筛选项和监听器
 (function initCheckBox(){
     const tableBody = document.querySelector('#table-body');
     const productRadioWrapper = document.querySelector('#product-radio-wrapper');
     const regionRadioWrapper = document.querySelector('#region-radio-wrapper');
+   
+
+    generateCheckBox(productRadioWrapper, productList);
+    generateCheckBox(regionRadioWrapper, regionList);
+     
+
+    const productCheckBoxes = productRadioWrapper.querySelectorAll('[data-type="checkbox"]');
+    const regionCheckBoxes = regionRadioWrapper.querySelectorAll('[data-type="checkbox"]');
+    const productAll = productRadioWrapper.querySelector(`#product-all`);
+    const regionAll = regionRadioWrapper.querySelector(`#region-all`);
+    let regionChecked = 1;
     let productChecked = 1;
-    let regionChecked = 1; 
-    generateCheckBox(productRadioWrapper, productList, 'product');
-    generateCheckBox(regionRadioWrapper, regionList, 'region');
 
-    function generateCheckBox(container, options, group){
 
-        let html = '';
-        html += `<input type="checkbox" id="all"  value="all">
-        <label for="all">全部</label>`;
-
-        options.forEach(el => {
-            html += `<input type="checkbox" id="${el}"  data-type="checkbox" value="${el}">
-            <label for="${el}">${el}</label>`
-        })
-
-        container.innerHTML = html;
-        //exclude 'all'
-        const checkBoxes = container.querySelectorAll('[data-type="checkbox"]');
-        const all = container.querySelector('#all');
-        let checked = 1; 
-
-        checkBoxes.forEach(el => {
-            if (el.value === '华东' || el.value === '手机') {
-                el.checked = true;
+    productRadioWrapper.addEventListener('click', e => {
+        if (e.target.dataset.type === 'checkbox') {
+            let checked = checkedCounter(productCheckBoxes);
+            if ( checked <= 0) {
+                e.target.checked = true; 
+                checked++;
             }
-        })
+            else if (checked === optionList['product'].length) productAll.checked = true;
+            else productAll.checked = false;
+            updateOptionList(productCheckBoxes, optionList, 'product');
 
-        showTable(sourceData, optionList, thOrder, tableBody);
-        container.addEventListener('change',(e) => {
-            if (e.target.type === 'checkbox'){
+             //列的顺序
+             if (checked > 1 && regionChecked === 1) {
+                 regionFirst();
+             } else {
+                 productFirst();
+             } 
+
+             productChecked = checked; 
+        }
+    })
+
+
+   regionRadioWrapper.addEventListener('click', e => {
+        if (e.target.dataset.type === 'checkbox') {
+            let checked = checkedCounter(regionCheckBoxes);
+            //不允许一个都不选
+            if ( checked <= 0) {
+                e.target.checked = true; 
+                checked++;
+            }
+            //如果全选，自动选中全选checkbox
+            else if (checked === optionList['product'].length) regionAll.checked = true;
+            else regionAll.checked = false;
+            updateOptionList(regionCheckBoxes, optionList, 'region');
+            //列的顺序
+         
+            if (checked === 1 && productChecked > checked) {
+                regionFirst();
+            } else {
+                productFirst();
+            }
+            regionChecked = checked;
             
-                if (e.target.value === 'all') {
-                if (!e.target.checked) e.target.checked = true;
-                checked = optionList[group].length;
-                checkBoxes.forEach(el => {
+
+        }
+    })
+
+
+    productAll.addEventListener('click', (e) => {
+        //这个按钮只允许选择全部， 不允许取消选择。
+        if (!e.target.checked) e.target.checked = true;
+        else {
+            if (checkedCounter(productCheckBoxes) < optionList['product'].length){
+                productCheckBoxes.forEach(el => {
                     el.checked = true;
-                    optionList[group][el.value] = true;
-                })
-                } else {
-                    if (e.target.checked) checked++;
-                    else checked--;
-                    //当没有选项被选中时， 重新选中当前选项，对表格不作更新
-                    if (checked === 0) {
-                        e.target.checked = true;
-                        checked++;
-                        return;
-                    }
-                    //当全部选中时， 同时勾选全选框
-                    else if (checked === optionList[group].length){
-                        all.checked = true;
-                    } 
-                    //中间状态， 取消全选框
-                    else {
-                        all.checked = false;
-                    
-                    }  
-                }
-
-                if (group === 'product') productChecked = checked;
-                else regionChecked = checked;
-
-                if (productChecked === 1 && regionChecked > 1) {
-                    thOrder[0] = 'product';
-                    thOrder[1] = 'region';
-                } else if (productChecked > 1 && regionChecked === 1){
-                    thOrder[0] = 'region';
-                    thOrder[1] = 'product';
-                } else if (productChecked === 1 && regionChecked === 1){
-                    thOrder[0] = 'product';
-                    thOrder[1] = 'region';
-                } else {
-                    thOrder[0] = 'product';
-                    thOrder[1] = 'region';
-                }
-                //更新选中项
-                checkBoxes.forEach(el => {
-                    if (el.checked){
-                        optionList[group][el.value] = true;
-                        
+                    updateOptionList(productCheckBoxes, optionList, 'product');
+                    if (regionChecked === 1){
+                        regionFirst()
                     } else {
-                        optionList[group][el.value] = false;
+                        productFirst();
                     }
                 })
-                //展示表格
-                showTable(sourceData, optionList, thOrder, tableBody);
-
             }
-        })
-       
-    
+        }
+    })
+
+
+    regionAll.addEventListener('click', (e) => {
+        //这个按钮只允许选择全部， 不允许取消选择。
+        if (!e.target.checked) e.target.checked = true;
+        else {
+            if (checkedCounter(regionCheckBoxes) < optionList['region'].length){
+                regionCheckBoxes.forEach(el => {
+                    el.checked = true;
+                    updateOptionList(regionCheckBoxes, optionList, 'region');
+                    productFirst();
+                })
+            }
+        }
+    })
+
+
+    //设置初始选中项
+    productCheckBoxes.forEach(el => {
+        if (el.value === '手机') el.checked = true;   
+    })
+    regionCheckBoxes.forEach(el => {
+        if (el.value === '华东') el.checked = true;
+    })
+    productFirst();
+
+
+    //两个列序
+    function productFirst(){
+        const thOrder = {'0': 'product', '1': 'region', '2': 'sale'};
+        showTable(sourceData, optionList, thOrder, tableBody);
+    }
+
+    function regionFirst(){
+        const order = {'0': 'region', '1': 'product', '2': 'sale'};
+        showTable(sourceData, optionList, order, tableBody);
     }
 
 })()
 
 
+drawBar(document.querySelector('#bar-wrapper'), sourceData[0].sale)
 
-
-//next: 将时间监听器从generateCheckBox中抽出
