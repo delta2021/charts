@@ -1,4 +1,15 @@
+
+import {drawBarChart} from './bar.js';
+import {drawLineChart} from './line.js';
+
 function dataFilter(data, optionList){
+    //给数据添加识别号码
+    let n = 0;
+    data = data.map(el => {
+        el.index = n;
+        n++;
+        return el;
+    })
     return data.filter(el => {
         let isSelected = true;
         for (const option in optionList){
@@ -29,6 +40,7 @@ export function showTable(source, optionList, thOrder, container){
     
     filteredData.forEach(el => {
         const newRow = document.createElement('tr');
+        newRow.dataset.index = el.index; //用来识别这行是原始数组的第几个
         let col_1 = '', col_2 = '';
         if (el[thOrder[0]] != col_1_val){
             col_1_val = el[thOrder[0]]; 
@@ -61,5 +73,19 @@ export function showTable(source, optionList, thOrder, container){
             container.querySelector('#' + el).setAttribute('rowspan', col_1_list[el]);
         }
     }
+
+
+    container.querySelectorAll('tr').forEach(row => {
+        row.addEventListener('mouseover', () => {
+            const i = row.dataset.index;
+            updateCharts(source[i].sale);
+        })
+    })
 }
 
+const barWrapper = document.querySelector('#bar-wrapper');
+const lineCanvas = document.querySelector('#line-chart-canvas');
+function updateCharts(data){
+    drawLineChart(lineCanvas, data);
+    drawBarChart(barWrapper, data) 
+}

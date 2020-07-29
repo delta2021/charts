@@ -7,45 +7,53 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="region-select center">
-        <p>地区：</p>
-        <div id="region-radio-wrapper" data-group="region"></div>
-    </div>
-
-    <div class="product-select center" >
-        <p>商品：</p>
-        <div id="product-radio-wrapper" data-group="product"></div>
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="region-select center">
+                <p>地区：</p>
+                <div id="region-radio-wrapper" data-group="region"></div>
+            </div>
+        
+            <div class="product-select center" >
+                <p>商品：</p>
+                <div id="product-radio-wrapper" data-group="product"></div>
+            
+            </div>
+        
+        </div>
     
+
+        <div class="chart-wrapper">
+            <div id="bar-wrapper"></div>
+            <canvas id="line-chart-canvas"></canvas>
+        </div>
+    
+        <div id="table-wrapper">
+            <table class="tg">
+                <thead>
+                <tr>
+                    <th class="tg-0lax" id="th-1">商品</th>
+                    <th class="tg-0lax" id="th-2">地区</th>
+                    <th class="tg-0lax">一月</th>
+                    <th class="tg-0lax">二月</th>
+                    <th class="tg-0lax">三月</th>
+                    <th class="tg-0lax">四月</th>
+                    <th class="tg-0lax">五月</th>
+                    <th class="tg-0lax">六月</th>
+                    <th class="tg-0lax">七月</th>
+                    <th class="tg-0lax">八月</th>
+                    <th class="tg-0lax">九月</th>
+                    <th class="tg-0lax">十月</th>
+                    <th class="tg-0lax">十一月</th>
+                    <th class="tg-0lax">十二月</th>
+                </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+                </table>
+        </div>
     </div>
+
    
-    <div id="table-wrapper">
-        <table class="tg">
-            <thead>
-              <tr>
-                <th class="tg-0lax" id="th-1">商品</th>
-                <th class="tg-0lax" id="th-2">地区</th>
-                <th class="tg-0lax">一月</th>
-                <th class="tg-0lax">二月</th>
-                <th class="tg-0lax">三月</th>
-                <th class="tg-0lax">四月</th>
-                <th class="tg-0lax">五月</th>
-                <th class="tg-0lax">六月</th>
-                <th class="tg-0lax">七月</th>
-                <th class="tg-0lax">八月</th>
-                <th class="tg-0lax">九月</th>
-                <th class="tg-0lax">十月</th>
-                <th class="tg-0lax">十一月</th>
-                <th class="tg-0lax">十二月</th>
-              </tr>
-            </thead>
-            <tbody id="table-body"></tbody>
-            </table>
-    </div>
-
-
-    <div id="bar-wrapper">
-
-    </div>
 
     <script type="module" src="main.js"></script>
 </body>

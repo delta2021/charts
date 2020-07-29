@@ -1,4 +1,4 @@
-export function drawBar(container, data){
+export function drawBarChart(container, data){
   const maximum = Math.max(...data);
   const canvasHeight = 300;
   const canvasWidth = 500;
@@ -11,8 +11,8 @@ export function drawBar(container, data){
   const ratio = axisHeight / maximum;
   const originX = 50;
   const originY = 250;
-
-
+    
+  container.innerHTML = '';
   const svgNode = createSVGElement('svg');
   container.appendChild(svgNode);
   svgNode.setAttributeNS(null, 'width', canvasWidth);

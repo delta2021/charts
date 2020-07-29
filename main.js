@@ -1,11 +1,14 @@
 import {sourceData, productList, regionList, optionList, updateOptionList} from './modules/data.js';
 import {showTable} from './modules/table.js';
 import {generateCheckBox, checkedCounter} from './modules/checkBox.js';
-import {drawBar} from './modules/bar.js';
+import {drawBarChart} from './modules/bar.js';
+import {drawLineChart} from './modules/line.js';
 
 
 //生成筛选项和监听器
 (function initCheckBox(){
+   
+    //nodes
     const tableBody = document.querySelector('#table-body');
     const productRadioWrapper = document.querySelector('#product-radio-wrapper');
     const regionRadioWrapper = document.querySelector('#region-radio-wrapper');
@@ -14,11 +17,15 @@ import {drawBar} from './modules/bar.js';
     generateCheckBox(productRadioWrapper, productList);
     generateCheckBox(regionRadioWrapper, regionList);
      
-
+    //nodes
     const productCheckBoxes = productRadioWrapper.querySelectorAll('[data-type="checkbox"]');
     const regionCheckBoxes = regionRadioWrapper.querySelectorAll('[data-type="checkbox"]');
     const productAll = productRadioWrapper.querySelector(`#product-all`);
     const regionAll = regionRadioWrapper.querySelector(`#region-all`);
+    const barWrapper = document.querySelector('#bar-wrapper');
+    const lineWrapper = document.querySelector('#line-chart-canvas');
+
+    //flags
     let regionChecked = 1;
     let productChecked = 1;
 
@@ -114,6 +121,10 @@ import {drawBar} from './modules/bar.js';
         if (el.value === '华东') el.checked = true;
     })
     productFirst();
+    //初始的图表
+    drawBarChart(barWrapper, sourceData[0].sale)
+    drawLineChart(lineWrapper, sourceData[0].sale);
+
 
 
     //两个列序
@@ -127,8 +138,11 @@ import {drawBar} from './modules/bar.js';
         showTable(sourceData, optionList, order, tableBody);
     }
 
+
+  
+
 })()
 
 
-drawBar(document.querySelector('#bar-wrapper'), sourceData[0].sale)
+
 
