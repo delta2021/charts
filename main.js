@@ -123,7 +123,7 @@ import {drawLineChart} from './modules/line.js';
     productFirst();
     //初始的图表
     drawBarChart(barWrapper, sourceData[0].sale)
-    drawLineChart(lineWrapper, sourceData[0].sale);
+    drawLineChart(lineWrapper, sourceData[0].sale, true);
 
 
 

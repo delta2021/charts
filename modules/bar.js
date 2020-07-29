@@ -1,3 +1,5 @@
+import {createSVGElement, setSVGAttributes} from './utilities.js'
+
 export function drawBarChart(container, data){
   const maximum = Math.max(...data);
   const canvasHeight = 300;
@@ -12,7 +14,7 @@ export function drawBarChart(container, data){
   const originX = 50;
   const originY = 250;
     
-  container.innerHTML = '';
+
   const svgNode = createSVGElement('svg');
   container.appendChild(svgNode);
   svgNode.setAttributeNS(null, 'width', canvasWidth);
@@ -42,19 +44,6 @@ export function drawBarChart(container, data){
 }
 
 
-function createSVGElement(tag, fn, param) {
-    const node =  document.createElementNS('http://www.w3.org/2000/svg', tag);
-    if (fn){
-        fn(node, param);
-    }
-    return node
-  }
-
-function setSVGAttributes(node, pairs) {
-    for (const pair in pairs){
-        node.setAttributeNS(null,  pair,  pairs[pair]);
-    }
-}
 
 function lineAttributesDict(x1, y1, x2, y2, stroke, strokeWidth){
     return {x1, y1, x2, y2, stroke, 'stroke-width': strokeWidth || 1}

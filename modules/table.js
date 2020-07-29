@@ -1,26 +1,8 @@
 
 import {drawBarChart} from './bar.js';
-import {drawLineChart} from './line.js';
-
-function dataFilter(data, optionList){
-    //给数据添加识别号码
-    let n = 0;
-    data = data.map(el => {
-        el.index = n;
-        n++;
-        return el;
-    })
-    return data.filter(el => {
-        let isSelected = true;
-        for (const option in optionList){
-          let value = el[option]; 
-          if (!optionList[option][value]){
-              isSelected = false; 
-          }
-       }
-       return isSelected;
-    })
-}
+import {drawLineChart, drawMultipleLines} from './line.js';
+import {colors} from './colors.js';
+import {clearCanvas} from './utilities.js';
 
 export function showTable(source, optionList, thOrder, container){
     let filteredData;
@@ -75,17 +57,51 @@ export function showTable(source, optionList, thOrder, container){
     }
 
 
+    const salesArr = [];
+    container.querySelectorAll('tr').forEach(row => {
+        const i = row.dataset.index;
+        salesArr.push(source[i].sale);
+    })
+    drawMultipleLines(lineCanvas, salesArr, colors);
+
     container.querySelectorAll('tr').forEach(row => {
         row.addEventListener('mouseover', () => {
             const i = row.dataset.index;
-            updateCharts(source[i].sale);
+            updateCharts(source[i].sale, row.dataset.index);
         })
+        row.addEventListener('mouseout', () => {
+            drawMultipleLines(lineCanvas, salesArr, colors);
+        })
+    })
+}
+
+
+function dataFilter(data, optionList){
+    //给数据添加识别号码
+    let n = 0;
+    data = data.map(el => {
+        el.index = n;
+        n++;
+        return el;
+    })
+    return data.filter(el => {
+        let isSelected = true;
+        for (const option in optionList){
+          let value = el[option]; 
+          if (!optionList[option][value]){
+              isSelected = false; 
+          }
+       }
+       return isSelected;
     })
 }
 
 const barWrapper = document.querySelector('#bar-wrapper');
 const lineCanvas = document.querySelector('#line-chart-canvas');
-function updateCharts(data){
-    drawLineChart(lineCanvas, data);
+
+function updateCharts(data, index){
+    barWrapper.innerHTML = '';
+    drawLineChart(lineCanvas, data, true, colors[index]);
     drawBarChart(barWrapper, data) 
 }
+
