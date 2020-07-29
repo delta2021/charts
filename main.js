@@ -6,7 +6,7 @@ import {drawLineChart} from './modules/line.js';
 import {colors} from './modules/colors.js';
 
 
-//生成筛选项和监听器
+
 (function initCheckBox(){
    
     //nodes
