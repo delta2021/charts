@@ -1,4 +1,4 @@
-export  { clearCanvas, createSVGElement, setSVGAttributes};
+export  { clearCanvas, createSVGElement, setSVGAttributes, createSVGtext};
 
 function clearCanvas(canvas, width=500, height=300){
     const ctx = canvas.getContext('2d');
@@ -17,4 +17,12 @@ function setSVGAttributes(node, pairs) {
     for (const pair in pairs){
         node.setAttributeNS(null,  pair,  pairs[pair]);
     }
+
+}
+
+function createSVGtext(textContent, attributes){
+    const textNode = createSVGElement('text', setSVGAttributes, attributes);
+    const textContentNode = document.createTextNode(textContent);
+    textNode.appendChild(textContentNode);
+    return textNode;
 }

@@ -3,6 +3,7 @@ import {showTable} from './modules/table.js';
 import {generateCheckBox, checkedCounter} from './modules/checkBox.js';
 import {drawBarChart} from './modules/bar.js';
 import {drawLineChart} from './modules/line.js';
+import {colors} from './modules/colors.js';
 
 
 //生成筛选项和监听器
@@ -123,7 +124,7 @@ import {drawLineChart} from './modules/line.js';
     productFirst();
     //初始的图表
     drawBarChart(barWrapper, sourceData[0].sale)
-    drawLineChart(lineWrapper, sourceData[0].sale, true);
+    drawLineChart(lineWrapper, sourceData[0].sale, true, colors[0]);
 
 
 
@@ -137,9 +138,6 @@ import {drawLineChart} from './modules/line.js';
         const order = {'0': 'region', '1': 'product', '2': 'sale'};
         showTable(sourceData, optionList, order, tableBody);
     }
-
-
-  
 
 })()
 

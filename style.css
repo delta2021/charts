@@ -35,3 +35,14 @@
    
   }
 }
+
+
+.chart-text-s {
+  font:10px sans-serif;
+  fill: #bbb;
+}
+
+.chart-text-m {
+  font:12px sans-serif;
+  fill: green;
+}

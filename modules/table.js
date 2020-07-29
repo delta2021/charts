@@ -2,7 +2,7 @@
 import {drawBarChart} from './bar.js';
 import {drawLineChart, drawMultipleLines} from './line.js';
 import {colors} from './colors.js';
-import {clearCanvas} from './utilities.js';
+
 
 export function showTable(source, optionList, thOrder, container){
     let filteredData;
