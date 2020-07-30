@@ -43,6 +43,35 @@ export const optionList = {product: {'手机': true, '笔记本': false, '智能
 region: {'华东': true, '华南': false, '华北': false, length: 3}};
 
 
+const dict = (function getCombinationIndex(){
+    const dict = {};
+    let index = 0;
+    originalData.forEach(el => {
+        const key = el.region + el.product;
+        dict[key] = index;
+        index++;
+    })
+    return dict;
+})()
+
+export function getSalesData(sourceData, str){
+    console.log(str);
+    return sourceData[dict[str]].sale; 
+}
+
+export function getOptionSelected(){
+    let p ='p=';
+    let r = 'r='
+    for (const key in optionList.product){
+        if (optionList.product[key] && key != 'length') p += key + '&';
+    }
+
+    for (const key in optionList.region){
+        if (optionList.region[key]  && key != 'length') r += key + '&';
+    }
+    return p + r; 
+}
+
 export function updateOptionList(checkBoxes, optionList, group){
     checkBoxes.forEach(el => {
         if (el.checked){

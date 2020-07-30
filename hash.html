@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function parseHash(){
+            return location.hash.slice(1);
+        }
+        function renderText(container, index){
+            container.innerHTML = parseHash()[index] || '';
+        }
+        window.onload = function(){
+            document.querySelectorAll('button').forEach(btn => {
+
+            btn.onclick = function(e){
+                if (e.target.id == 'a' || e.target.id == 'b'||
+                e.target.id == 'c'){
+                    location.hash = e.target.innerText + location.hash.slice(2,3);
+                } else {
+                    location.hash = location.hash.slice(1,2)+ e.target.innerText ;
+                }
+                
+            }
+        })
+        renderText(document.querySelector('#contABC'), 0);
+            renderText(document.querySelector('#contDEF'), 1);
+        }
+        
+
+        window.onhashchange = function(){
+            renderText(document.querySelector('#contABC'), 0);
+            renderText(document.querySelector('#contDEF'), 1);
+        }
+
+    </script>
+</head>
+
+<body>
+    <button id="a">A</button>
+    <button id="b">B</button>
+    <button id="c">C</button>
+
+    <button id="d">D</button>
+    <button id="e">E</button>
+    <button id="f">F</button>
+
+
+    <div id="contABC"></div>
+    <div id="contDEF"></div>
+</body>
+</html>

@@ -1,14 +1,18 @@
-import {originalData, productList, regionList, optionList, updateOptionList, pullNewData, replaceData} from './modules/data.js';
+import {originalData, productList, regionList, optionList, updateOptionList, 
+    pullNewData, replaceData,getSalesData} from './modules/data.js';
 import {showTable} from './modules/table.js';
 import {generateCheckBox, checkedCounter} from './modules/checkBox.js';
 import {drawBarChart} from './modules/bar.js';
-import {drawLineChart} from './modules/line.js';
+import {drawLineChart, drawMultipleLines} from './modules/line.js';
 import {colors} from './modules/colors.js';
 import {getData, saveData} from'./modules/localStorage.js';
+import {setHash, parseHash} from './modules/hash.js';
 
 
 
 (function init(){
+
+   
     // obtain data
     let sourceData;
     if (getData()) sourceData = getData();
@@ -63,13 +67,10 @@ import {getData, saveData} from'./modules/localStorage.js';
             updateOptionList(productCheckBoxes, optionList, 'product');
 
              //列的顺序
-             if (checked > 1 && regionChecked === 1) {
-                 regionFirst();
-             } else {
-                 productFirst();
-             } 
-
              productChecked = checked; 
+             renderTable();
+             setHash();
+          
         }
     })
 
@@ -87,15 +88,9 @@ import {getData, saveData} from'./modules/localStorage.js';
             else regionAll.checked = false;
             updateOptionList(regionCheckBoxes, optionList, 'region');
             //列的顺序
-         
-            if (checked === 1 && productChecked > checked) {
-                regionFirst();
-            } else {
-                productFirst();
-            }
             regionChecked = checked;
-            
-
+            renderTable();
+            setHash();
         }
     })
 
@@ -115,6 +110,7 @@ import {getData, saveData} from'./modules/localStorage.js';
                     }
                 })
             }
+            setHash();
         }
     })
 
@@ -130,25 +126,67 @@ import {getData, saveData} from'./modules/localStorage.js';
                     productFirst();
                 })
             }
+            setHash();
         }
     })
 
 
     //设置初始选中项
-    productCheckBoxes.forEach(el => {
-        if (el.value === '手机') el.checked = true;   
-    })
-    regionCheckBoxes.forEach(el => {
-        if (el.value === '华东') el.checked = true;
-    })
-    productFirst();
-    //初始的图表
-    drawBarChart(barWrapper, sourceData[0].sale)
-    drawLineChart(lineWrapper, sourceData[0].sale, true, colors[0]);
+    if (!location.hash){
+        productCheckBoxes.forEach(el => {
+            if (el.value === '手机') el.checked = true;   
+        })
+        regionCheckBoxes.forEach(el => {
+            if (el.value === '华东') el.checked = true;
+        })
+        productFirst();
+    
+        //初始的图表
+        drawBarChart(barWrapper, sourceData[0].sale);
+        drawLineChart(lineWrapper, sourceData[0].sale, true, colors[0]);
+    } else {
+        let para = parseHash();
+        //获得产品参数
+        let i = para.indexOf('p');
+        //获得地区参数
+        let j = para.indexOf('r');
+        let products = para.slice(i+2, j-1).split('&');
+        let region = para.slice(j+2, para.length-1).split('&');
+        productChecked = products.length;
+        regionChecked = region.length;
+        products.forEach(el => {
+            productRadioWrapper.querySelector('#' + el).checked = true;
+        })
+        region.forEach(el => {
+            regionRadioWrapper.querySelector('#' + el).checked = true;
+        })
+        const salesData = [];
+        for (let i = 0, len = products.length; i < len; i++){
+            for (let j = 0, len = region.length; j < len; j++){
+                const temp = getSalesData(sourceData, region[j] + products[i]);
+                salesData.push(temp);
+            }
+        }
+        
+        drawBarChart(barWrapper, salesData[0]);
+        drawMultipleLines(lineWrapper, salesData, colors);
+        updateOptionList(regionCheckBoxes, optionList, 'region');
+        updateOptionList(productCheckBoxes, optionList, 'product');
+        renderTable();
+
+    }
+   
 
 
 
     //两个列序
+    function renderTable(){
+        if (productChecked > 1 && regionChecked === 1) {
+            regionFirst();
+        } else {
+            productFirst();
+        } 
+    }
     function productFirst(){
         const thOrder = {'0': 'product', '1': 'region', '2': 'sale'};
         showTable(sourceData, optionList, thOrder, tableBody);
@@ -158,6 +196,8 @@ import {getData, saveData} from'./modules/localStorage.js';
         const order = {'0': 'region', '1': 'product', '2': 'sale'};
         showTable(sourceData, optionList, order, tableBody);
     }
+
+    
 
 })()
 
