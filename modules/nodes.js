@@ -1,0 +1,1 @@
+export const chartTitleNode =  document.querySelector('.tag').querySelector('p');

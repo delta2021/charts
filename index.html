@@ -19,16 +19,22 @@
                 <div id="product-radio-wrapper" data-group="product"></div>
             
             </div>
-        
+            
         </div>
-    
-
+       
         <div class="chart-wrapper">
-            <div id="bar-wrapper"></div>
+            <div class="left">
+                <div id="bar-wrapper"></div>
+                <div class="tag">
+                    <p>华东手机销量</p>
+                </div>
+            </div>
+            
             <canvas id="line-chart-canvas" width="500" height="300"></canvas>
         </div>
     
         <div id="table-wrapper">
+           
             <table class="tg">
                 <thead>
                 <tr>
@@ -46,10 +52,12 @@
                     <th class="tg-0lax">十月</th>
                     <th class="tg-0lax">十一月</th>
                     <th class="tg-0lax">十二月</th>
+                    <th class="btn-wrapper"><button id="btn-update">保存</button></th>
                 </tr>
+               
                 </thead>
                 <tbody id="table-body"></tbody>
-                </table>
+            </table>
         </div>
     </div>
 

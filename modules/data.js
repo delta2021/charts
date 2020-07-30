@@ -1,4 +1,4 @@
-export const sourceData = [{
+export const originalData = [{
     product: "手机",
     region: "华东",
     sale: [120, 100, 140, 160, 180, 185, 190, 210, 230, 245, 255, 270]
@@ -52,4 +52,42 @@ export function updateOptionList(checkBoxes, optionList, group){
             optionList[group][el.value] = false;
         }
      })
+}
+
+
+export function pullNewData(nodeList){
+    const result = []
+    nodeList.forEach(node => {
+        const newData = {};
+        newData.index = node.dataset.index;
+        const arr = [];
+        node.querySelectorAll('input').forEach(input => {
+            arr.push(input.value);
+        })
+        newData.data = arr;
+        result.push(newData)
+    })
+
+    return result;
+}
+
+export function replaceData(old, newData){
+
+    let invalid = false;
+    newData.forEach(obj => {
+        if (invalid) return; 
+        obj.data.forEach(el => {
+            if (isNaN(el)) {
+                invalid = true;
+                return;
+            }       
+        })
+    })
+
+    if (invalid) return false;
+    newData.forEach(obj => {
+        old[obj.index].sale = obj.data;
+    })
+    return true;
+   
 }

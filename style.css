@@ -5,14 +5,25 @@
   font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
 .tg .tg-0lax{text-align:left;vertical-align:top}
 
-
+.tg .btn-wrapper {
+  border: none;
+  background-color: transparent;
+}
 .center {
   display: flex;
   align-items: center;
 }
 
+.tag {
+  text-align: center;
+  transform: translateY(-30px);
+  font-size: 12px;
+  color: #aaa;
+}
 
-
+.tag p {
+  margin: 0;
+}
 @media screen and (min-width: 768px) {
 
   body {
@@ -32,7 +43,12 @@
   .chart-wrapper {
     display: flex;
     transform: translateX(-50px);
+    align-items: flex-start;
    
+  }
+
+  .chart-wrapper canvas {
+    flex: 0;
   }
 }
 

@@ -1,19 +1,39 @@
-import {sourceData, productList, regionList, optionList, updateOptionList} from './modules/data.js';
+import {originalData, productList, regionList, optionList, updateOptionList, pullNewData, replaceData} from './modules/data.js';
 import {showTable} from './modules/table.js';
 import {generateCheckBox, checkedCounter} from './modules/checkBox.js';
 import {drawBarChart} from './modules/bar.js';
 import {drawLineChart} from './modules/line.js';
 import {colors} from './modules/colors.js';
+import {getData, saveData} from'./modules/localStorage.js';
 
 
 
-(function initCheckBox(){
-   
+(function init(){
+    // obtain data
+    let sourceData;
+    if (getData()) sourceData = getData();
+    else sourceData = originalData;
     //nodes
     const tableBody = document.querySelector('#table-body');
     const productRadioWrapper = document.querySelector('#product-radio-wrapper');
     const regionRadioWrapper = document.querySelector('#region-radio-wrapper');
-   
+    const btn = document.querySelector('#btn-update');
+
+    //update data
+    btn.addEventListener('click', () => {
+        const rowsNode = tableBody.querySelectorAll('tr');
+        const newData = pullNewData(rowsNode);
+        const updated = replaceData(sourceData, newData);
+        if (!updated) {
+            alert('包含无效输入，保存失败！');
+        } else {
+            saveData(sourceData);
+            alert('保存成功！');
+        }
+        if (regionChecked < productChecked && regionChecked === 1) regionFirst();
+        else productFirst();
+    })
+
 
     generateCheckBox(productRadioWrapper, productList);
     generateCheckBox(regionRadioWrapper, regionList);
