@@ -116,7 +116,6 @@ const barWrapper = document.querySelector('#bar-wrapper');
 const lineCanvas = document.querySelector('#line-chart-canvas');
 
 function updateCharts(data, index){
-    barWrapper.innerHTML = '';
     drawLineChart(lineCanvas, data, true, colors[index]);
     drawBarChart(barWrapper, data) 
 }

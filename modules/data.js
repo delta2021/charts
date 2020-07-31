@@ -55,7 +55,6 @@ const dict = (function getCombinationIndex(){
 })()
 
 export function getSalesData(sourceData, str){
-    console.log(str);
     return sourceData[dict[str]].sale; 
 }
 

@@ -1,6 +1,10 @@
 import {createSVGElement, setSVGAttributes, createSVGtext} from './utilities.js'
 
 export function drawBarChart(container, data){
+
+  container.innerHTML = '';
+
+  
   const maximum = Math.max(...data);
   const canvasHeight = 300;
   const canvasWidth = 500;

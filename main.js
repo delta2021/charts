@@ -68,7 +68,7 @@ import {setHash, parseHash} from './modules/hash.js';
 
              //列的顺序
              productChecked = checked; 
-             renderTable();
+             //会触发onpopState
              setHash();
           
         }
@@ -89,7 +89,6 @@ import {setHash, parseHash} from './modules/hash.js';
             updateOptionList(regionCheckBoxes, optionList, 'region');
             //列的顺序
             regionChecked = checked;
-            renderTable();
             setHash();
         }
     })
@@ -145,39 +144,16 @@ import {setHash, parseHash} from './modules/hash.js';
         drawBarChart(barWrapper, sourceData[0].sale);
         drawLineChart(lineWrapper, sourceData[0].sale, true, colors[0]);
     } else {
-        let para = parseHash();
-        //获得产品参数
-        let i = para.indexOf('p');
-        //获得地区参数
-        let j = para.indexOf('r');
-        let products = para.slice(i+2, j-1).split('&');
-        let region = para.slice(j+2, para.length-1).split('&');
-        productChecked = products.length;
-        regionChecked = region.length;
-        products.forEach(el => {
-            productRadioWrapper.querySelector('#' + el).checked = true;
-        })
-        region.forEach(el => {
-            regionRadioWrapper.querySelector('#' + el).checked = true;
-        })
-        const salesData = [];
-        for (let i = 0, len = products.length; i < len; i++){
-            for (let j = 0, len = region.length; j < len; j++){
-                const temp = getSalesData(sourceData, region[j] + products[i]);
-                salesData.push(temp);
-            }
-        }
-        
-        drawBarChart(barWrapper, salesData[0]);
-        drawMultipleLines(lineWrapper, salesData, colors);
-        updateOptionList(regionCheckBoxes, optionList, 'region');
-        updateOptionList(productCheckBoxes, optionList, 'product');
-        renderTable();
+        restoreState();
 
     }
    
 
+    window.onpopstate = function(){
+        restoreState();
+    }
 
+ 
 
     //两个列序
     function renderTable(){
@@ -195,6 +171,61 @@ import {setHash, parseHash} from './modules/hash.js';
     function regionFirst(){
         const order = {'0': 'region', '1': 'product', '2': 'sale'};
         showTable(sourceData, optionList, order, tableBody);
+    }
+
+
+    function restoreState(){
+       
+        let para = parseHash();
+        //获得产品参数
+        let i = para.indexOf('p');
+        //获得地区参数
+        let j = para.indexOf('r');
+        let products = para.slice(i+2, j-1).split('&');
+        let region = para.slice(j+2, para.length-1).split('&');
+        productChecked = products.length;
+        regionChecked = region.length;
+
+        productCheckBoxes.forEach(el => {
+           if (products.indexOf(el.id) >= 0){
+            el.checked = true;
+           } else {
+               el.checked = false;
+           }
+        })
+        regionCheckBoxes.forEach(el => {
+            if (region.indexOf(el.id) >= 0){
+                el.checked = true;
+               } else {
+                   el.checked = false;
+                }
+        })
+
+        if (productChecked >= optionList.product.length){
+            productAll.checked = true;
+        } else {
+            productAll.checked = false;
+        }
+
+        if (regionChecked >= optionList.region.length){
+            regionAll.checked = true;
+        } else {
+            regionAll.checked = false;
+        }
+        
+        const salesData = [];
+        for (let i = 0, len = products.length; i < len; i++){
+            for (let j = 0, len = region.length; j < len; j++){
+                const temp = getSalesData(sourceData, region[j] + products[i]);
+                salesData.push(temp);
+            }
+        }
+
+        drawBarChart(barWrapper, salesData[0]);
+        drawMultipleLines(lineWrapper, salesData, colors);
+        updateOptionList(regionCheckBoxes, optionList, 'region');
+        updateOptionList(productCheckBoxes, optionList, 'product');
+        renderTable();
     }
 
     
